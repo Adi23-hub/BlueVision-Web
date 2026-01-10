@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | BlueVision</title>
+  <link rel="stylesheet" href="/static/2dto3d.css">
+  <script src="https://kit.fontawesome.com/2719e9c5ba.js" crossorigin="anonymous"></script>
+  
+  <style>
+    /* --- ABOUT PAGE STYLES --- */
+    .about-container {
+        max-width: 800px;
+        margin: 80px auto; /* Centered vertically */
+        padding: 50px;
+        background: rgba(30, 41, 59, 0.7); /* Dark Glass */
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #e2e8f0;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .about-container h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        color: #ffffff;
+        font-weight: 800;
+    }
+
+    .about-container p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        color: #cbd5e1;
+        margin-bottom: 30px;
+    }
+
+    /* Animation Canvas Fix */
+    canvas.vanta-canvas { 
+        position: fixed !important; 
+        z-index: -1 !important; 
+        top: 0; 
+        left: 0; 
+        pointer-events: none; 
+    }
+  </style>
+</head>
+
+<body id="vanta-bg" style="background-color:#0f172a; color: #e2e8f0; margin:0; overflow-x:hidden;">
+
+  <nav class="navbar" style="background-color: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;">
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="/static/logo.jpg" alt="Logo" height="40" style="border-radius: 8px;">
+      <span class="logo-text" style="color: #ffffff; font-size: 1.4rem; font-weight: 800;">BlueVision</span>
+    </div>
+    <div class="menu">
+      <a href="/" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600;">Home</a>
+      <a href="/static/feature.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600;">Features</a>
+      <a href="/static/about.html" style="color: #ffffff; text-decoration: none; margin: 0 15px; font-weight: 600;">About</a>
+      <a href="/static/contact.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600;">Contact</a>
+    </div>
+    <div class="buttons">
+       <a href="/" class="btn" style="background: #2563eb; color: white; border: none; padding: 8px 24px; border-radius: 6px; font-weight: bold; text-decoration: none;">Get Started</a>
+    </div>
+  </nav>
+
+  <div class="about-container">
+      <h1>About Us</h1>
+      <p>
+        Welcome to <strong>BlueVision</strong> — your solution for converting 2D blueprints into 3D models. 
+        Our mission is to make 3D visualization simple, fast, and accessible for architects, designers, and creators.
+      </p>
+      
+      <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px;">
+          <div style="width: 10px; height: 10px; background: #2563eb; border-radius: 50%;"></div>
+          <div style="width: 10px; height: 10px; background: #ffffff; border-radius: 50%;"></div>
+          <div style="width: 10px; height: 10px; background: #2563eb; border-radius: 50%;"></div>
+      </div>
+  </div>
+
+  <footer>
+    <div style="text-align: center; padding: 30px; color: #94a3b8; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(5px); border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: auto;">
+        &copy; 2025 BlueVision. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            VANTA.GLOBE({
+                el: "#vanta-bg",
+                mouseControls: true, touchControls: true, gyroControls: false,
+                minHeight: 200.00, minWidth: 200.00, scale: 1.00, scaleMobile: 1.00,
+                color: 0x2563eb, backgroundColor: 0x0f172a, size: 1.10, color2: 0x1e293b
+            })
+        } catch(e) { console.log(e); }
+    });
+  </script>
+
+</body>
+</html>

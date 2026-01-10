@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-multipart
+sqlalchemy
+jinja2
+numpy
+scipy
+scikit-image
+trimesh
+passlib[bcrypt]
+pydantic
+google-genai
+networkx

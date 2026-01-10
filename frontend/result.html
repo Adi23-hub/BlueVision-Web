@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlueVision | 3D Result</title>
+  <link rel="stylesheet" href="/static/2dto3d.css">
+  <script src="https://kit.fontawesome.com/2719e9c5ba.js" crossorigin="anonymous"></script>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/"
+    }
+  }
+  </script>
+
+  <style>
+    /* --- DARK THEME STYLES --- */
+    
+    /* The 3D Viewer Container - UPDATED SIZE */
+    #model-viewer-container {
+      width: 95%;               /* Increased width */
+      max-width: 1600px;        /* Increased max-width */
+      height: 85vh;             /* Increased height (85% of screen) */
+      min-height: 650px;        /* Minimum height ensures it's always big */
+      margin: 20px auto;        /* Reduced margin to fit better */
+      background-color: #1e293b; 
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4); 
+      overflow: hidden;
+      position: relative;
+    }
+    
+    /* The AI Analysis Box */
+    #ai-analysis-container {
+      width: 90%; max-width: 1100px; margin: 30px auto;
+      background: rgba(30, 41, 59, 0.7); 
+      backdrop-filter: blur(10px);
+      padding: 30px; 
+      border-radius: 16px; 
+      border: 1px solid rgba(255,255,255,0.1);
+      border-left: 5px solid #2563eb; 
+      color: #e2e8f0;
+    }
+
+    /* Buttons */
+    .result-controls {
+        text-align: center; margin-bottom: 40px; display: flex; justify-content: center; gap: 20px;
+    }
+    
+    .btn-action {
+        padding: 12px 25px; border: none; border-radius: 8px;
+        font-size: 1rem; cursor: pointer; color: white;
+        text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+        font-weight: 600; transition: 0.2s;
+    }
+    
+    .btn-back { 
+        background-color: transparent; 
+        border: 1px solid rgba(255,255,255,0.3);
+        color: #e2e8f0;
+    }
+    .btn-back:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+    .btn-download { 
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+    }
+    .btn-download:hover { transform: translateY(-2px); }
+
+    /* Animation Canvas Fix */
+    canvas.vanta-canvas {
+        position: fixed !important; z-index: -1 !important; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+    }
+  </style>
+</head>
+
+<body id="vanta-bg" style="background-color: transparent; color: #e2e8f0; margin:0; overflow-x:hidden;">
+
+  <nav class="navbar" style="background-color: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;">
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="/static/logo.jpg" alt="Logo" height="40" style="border-radius: 8px;">
+      <span class="logo-text" style="color: #ffffff; font-size: 1.4rem; font-weight: 800;">BlueVision Result</span>
+    </div>
+    <div class="buttons">
+       <a href="/" class="btn" style="background: transparent; color: #ffffff; border: 1px solid #ffffff; text-decoration: none; padding: 8px 20px; border-radius: 6px; font-weight: bold;">Convert New</a>
+    </div>
+  </nav>
+
+  <h1 style="text-align: center; margin-top: 30px; color: white; font-weight: 700;">Your 3D Model</h1>
+
+  <div id="model-viewer-container"></div>
+
+  <div class="result-controls">
+      <button class="btn-action btn-back" onclick="window.location.href='/'">
+             <i class="fa-solid fa-arrow-left"></i> Convert Another
+      </button>
+      <a id="downloadLink" class="btn-action btn-download" href="#" download>
+        <i class="fa-solid fa-download"></i> Download Model
+      </a>
+  </div>
+
+  <div id="ai-analysis-container">
+    <h3 style="color: #ffffff; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px;">
+      <i class="fa-brands fa-google" style="margin-right: 8px; color: #2563eb;"></i> Gemini AI Analysis
+    </h3>
+    <p id="ai-analysis-text" style="font-size: 1.05em; line-height: 1.7; color: #cbd5e1;"></p>
+  </div>
+
+  <footer>
+    <div style="text-align: center; padding: 20px; color: #94a3b8; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(5px); border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        SolidView 2025
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            VANTA.GLOBE({
+                el: "#vanta-bg",
+                mouseControls: true, touchControls: true, gyroControls: false,
+                minHeight: 200.00, minWidth: 200.00, scale: 1.00, scaleMobile: 1.00,
+                color: 0x2563eb, backgroundColor: 0x0f172a, size: 1.10, color2: 0x1e293b
+            })
+        } catch(e) { console.log("Animation error:", e); }
+    });
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    let scene, camera, renderer, controls;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const modelUrl = sessionStorage.getItem('modelUrl');
+        const aiText = sessionStorage.getItem('aiAnalysis');
+
+        if (!modelUrl) {
+            alert("No model found. Redirecting to home.");
+            window.location.href = '/';
+            return;
+        }
+
+        const aiContainer = document.getElementById('ai-analysis-text');
+        if(aiText) { aiContainer.innerText = aiText; } 
+        else { aiContainer.innerText = "No analysis available for this model."; }
+
+        const dLink = document.getElementById('downloadLink');
+        dLink.href = modelUrl;
+        
+        init3DViewer(modelUrl);
+    });
+
+    function init3DViewer(modelUrl) {
+        const container = document.getElementById('model-viewer-container');
+        
+        // 1. Scene
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x1e293b); 
+        scene.fog = new THREE.Fog(0x1e293b, 50, 200);
+
+        // 2. Camera
+        camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 10000);
+        camera.position.set(12, 12, 20);
+
+        // 3. Renderer
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        // 4. Lights
+        const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambient);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2); 
+        dirLight.position.set(20, 40, 30);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.set(2048, 2048);
+        scene.add(dirLight);
+
+        // 5. Controls
+        controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // 6. Load Model
+        const textureLoader = new THREE.TextureLoader();
+        const wallTexture = textureLoader.load('/static/textures/wall_plaster.jpeg');
+        wallTexture.wrapS = THREE.RepeatWrapping; wallTexture.wrapT = THREE.RepeatWrapping;
+        wallTexture.repeat.set(5, 5); 
+
+        const floorTexture = textureLoader.load('/static/textures/wood_floor.jpeg');
+        floorTexture.wrapS = THREE.RepeatWrapping; floorTexture.wrapT = THREE.RepeatWrapping;
+        floorTexture.repeat.set(10, 10); 
+
+        const loader = new OBJLoader();
+        loader.load(modelUrl, (model) => {
+            const wallMaterial = new THREE.MeshStandardMaterial({
+                map: wallTexture, roughness: 0.8, metalness: 0.1, side: THREE.DoubleSide
+            });
+
+            model.traverse((child) => {
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.material = wallMaterial;
+                }
+            });
+
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const scale = 10 / maxDim; 
+            model.scale.set(scale, scale, scale);
+
+            const scaledBox = new THREE.Box3().setFromObject(model);
+            const scaledSize = scaledBox.getSize(new THREE.Vector3());
+            const scaledCenter = scaledBox.getCenter(new THREE.Vector3());
+
+            model.position.set(-scaledCenter.x, -scaledBox.min.y, -scaledCenter.z);
+            scene.add(model);
+
+            // Larger Floor
+            const floorGeo = new THREE.PlaneGeometry(scaledSize.x * 5, scaledSize.z * 5);
+            const floorMat = new THREE.MeshStandardMaterial({ map: floorTexture, roughness: 0.9 });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -0.01;
+            floor.receiveShadow = true;
+            scene.add(floor);
+
+            camera.position.set(scaledSize.x * 1.5, scaledSize.y * 1.8, scaledSize.z * 1.5); 
+            controls.target.set(0, scaledSize.y / 2, 0); 
+            controls.update();
+
+            animate();
+        });
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+
+    window.addEventListener('resize', () => {
+        const container = document.getElementById('model-viewer-container');
+        if (container && camera && renderer) {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+    });
+  </script>
+</body>
+</html>

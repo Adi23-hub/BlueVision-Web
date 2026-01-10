@@ -1,0 +1,233 @@
+/* =========================
+   GLOBAL RESET
+   ========================= */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.content {
+    flex: 1;
+}
+
+/* =========================
+   COLOR VARIABLES
+   ========================= */
+:root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+
+    --bg-dark: #0f172a;
+    --text-dark: #0f172a;     /* DARK BLUE */
+    --text-light: #ffffff;
+    --text-dim: #64748b;
+
+    --border-light: rgba(0,0,0,0.1);
+}
+
+/* =========================
+   BODY
+   ========================= */
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    min-height: 100vh;
+}
+
+/* =========================
+   NAVBAR
+   ========================= */
+.navbar {
+    background-color: #e5e7eb !important; /* LIGHT NAVBAR */
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border-light);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 50px;
+    margin-left: 40px;
+}
+
+.logo-text {
+    color: var(--text-dark) !important;
+    font-weight: 800;
+    font-size: 1.3rem;
+    margin-left: 10px;
+}
+
+/* MENU */
+.menu {
+    display: flex;
+    gap: 20px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: var(--text-dark) !important; /* DARK BLUE TEXT */
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: 0.2s ease;
+}
+
+.menu a:hover {
+    color: #1e3a8a !important;
+}
+
+/* BUTTONS */
+.buttons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-right: 40px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn.signin {
+    background: transparent;
+    color: var(--text-dark);
+    border: 1px solid var(--text-dark);
+}
+
+.btn.signup {
+    background: var(--primary);
+    color: white;
+}
+
+/* =========================
+   HERO / GALLERY
+   ========================= */
+.main-gallary {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-top: 3rem;
+}
+
+.card {
+    width: 500px;
+    height: 500px;
+    overflow: hidden;
+    border-radius: 16px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
+.upload-btn,
+.convert-btn {
+    background-color: #148a08;
+    color: white;
+    padding: 12px 28px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s ease;
+}
+
+.upload-btn:hover,
+.convert-btn:hover {
+    background-color: #0f6b06;
+    transform: scale(1.05);
+}
+
+/* =========================
+   POPUP
+   ========================= */
+.popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: white;
+    color: #333;
+    padding: 30px;
+    border-radius: 16px;
+    width: 320px;
+    text-align: center;
+    position: relative;
+}
+
+.popup-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.popup-content button {
+    background: #2563eb;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    color: red;
+    cursor: pointer;
+}
+
+/* --- FOOTER FIX --- */
+footer { 
+    text-align: center; 
+    padding: 20px; 
+    color: #94a3b8; /* Light Grey Text */
+    margin-top: auto; 
+    background: rgba(15, 23, 42, 0.9); /* Dark Glass Background */
+    backdrop-filter: blur(5px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+footer a { color: #ffffff; text-decoration: none; }
+
+/* =========================
+   VANTA BACKGROUND
+   ========================= */
+canvas.vanta-canvas {
+    position: fixed !important;
+    z-index: -1 !important;
+    inset: 0;
+    pointer-events: none;
+}

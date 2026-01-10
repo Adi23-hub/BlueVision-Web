@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile | BlueVision</title>
+  <link rel="stylesheet" href="/static/2dto3d.css">
+  <script src="https://kit.fontawesome.com/2719e9c5ba.js" crossorigin="anonymous"></script>
+  
+  <style>
+    /* --- DARK THEME OVERRIDES --- */
+    
+    /* Container for the profile content */
+    .profile-container { 
+        max-width: 900px; 
+        margin: 40px auto; 
+        padding: 20px; 
+    }
+
+    /* User Info Card (Glassmorphism) */
+    .profile-header { 
+        display: flex; 
+        align-items: center; 
+        gap: 30px; 
+        background: rgba(30, 41, 59, 0.7); /* Dark Glass */
+        backdrop-filter: blur(10px);
+        padding: 40px; 
+        border-radius: 16px; 
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+        margin-bottom: 40px; 
+    }
+
+    /* Avatar Circle */
+    .avatar { 
+        width: 100px; 
+        height: 100px; 
+        background: rgba(37, 99, 235, 0.2); /* Transparent Blue */
+        color: #2563eb; 
+        border: 1px solid #2563eb;
+        border-radius: 50%; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        font-size: 3rem; 
+    }
+
+    /* History Section Header */
+    .history-section h2 { 
+        border-bottom: 1px solid rgba(255,255,255,0.1); 
+        padding-bottom: 15px; 
+        margin-bottom: 25px; 
+        color: #ffffff; 
+        font-weight: 600;
+    }
+
+    /* Individual Project Card (Dark Style) */
+    .project-card { 
+        background: rgba(30, 41, 59, 0.7); 
+        padding: 25px; 
+        border-radius: 12px; 
+        border: 1px solid rgba(255,255,255,0.1);
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        margin-bottom: 15px; 
+        transition: 0.3s; 
+    }
+    .project-card:hover { 
+        transform: translateY(-3px); 
+        background: rgba(30, 41, 59, 0.9);
+        border-color: #2563eb;
+    }
+
+    /* Text Styles */
+    .project-info h4 { margin: 0 0 5px 0; font-size: 1.1em; color: white; }
+    .project-date { font-size: 0.85em; color: #94a3b8; } /* Light Grey */
+
+    /* View Button */
+    .btn-view { 
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); 
+        color: white; 
+        padding: 10px 20px; 
+        border-radius: 8px; 
+        text-decoration: none; 
+        font-size: 0.9em; 
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        transition: 0.2s;
+    }
+    .btn-view:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 99, 235, 0.5); }
+
+    /* Back Link */
+    .btn-home { 
+        display: inline-flex; align-items: center; gap: 8px;
+        margin-bottom: 25px; 
+        color: #cbd5e1; 
+        text-decoration: none; 
+        font-weight: 500;
+        transition: 0.2s;
+    }
+    .btn-home:hover { color: white; transform: translateX(-5px); }
+
+    /* Animation Canvas */
+    canvas.vanta-canvas {
+        position: fixed !important; z-index: -1 !important; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+    }
+  </style>
+</head>
+
+<body id="vanta-bg" style="background-color:#0f172a; color: #e2e8f0; margin:0; overflow-x:hidden;">
+
+  <nav class="navbar" style="background-color: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;">
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="/static/logo.jpg" alt="Logo" height="40" style="border-radius: 8px;">
+      <span class="logo-text" style="color: #ffffff; font-size: 1.4rem; font-weight: 800;">BlueVision Profile</span>
+    </div>
+    <div class="menu">
+       <a href="/" style="color: #e2e8f0; text-decoration: none; font-weight: 600;">Home</a>
+    </div>
+  </nav>
+
+  <div class="profile-container">
+      <a href="/" class="btn-home"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+      
+      <div class="profile-header">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <div class="user-info">
+              <h1 id="userName" style="color: white; margin: 0 0 5px 0;">Loading...</h1>
+              <p id="userEmail" style="color: #94a3b8; margin: 0;">...</p>
+          </div>
+      </div>
+
+      <div class="history-section">
+          <h2><i class="fa-solid fa-clock-rotate-left" style="color: #2563eb; margin-right: 10px;"></i> Project History</h2>
+          <div id="projects-list">
+              <p style="text-align: center; color: #94a3b8;">Loading your blueprints...</p>
+          </div>
+      </div>
+  </div>
+
+  <footer>
+    <div style="text-align: center; padding: 20px; color: #94a3b8; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(5px); border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        SolidView 2025
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            VANTA.GLOBE({
+                el: "#vanta-bg",
+                mouseControls: true, touchControls: true, gyroControls: false,
+                minHeight: 200.00, minWidth: 200.00, scale: 1.00, scaleMobile: 1.00,
+                color: 0x2563eb, backgroundColor: 0x0f172a, size: 1.10, color2: 0x1e293b
+            })
+        } catch(e) { console.log("Animation error:", e); }
+    });
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // --- FIREBASE CONFIG ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyAVawwT5U4X4Av_BDXD_gGluqgstuJPE7w",
+        authDomain: "bluevision-29a45.firebaseapp.com",
+        projectId: "bluevision-29a45",
+        storageBucket: "bluevision-29a45.firebasestorage.app",
+        messagingSenderId: "824504017524",
+        appId: "1:824504017524:web:83f2421f47462df350e721",
+        measurementId: "G-JCETH5XHR8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            // 1. Set Profile Info
+            document.getElementById('userName').textContent = user.displayName || user.email.split('@')[0];
+            document.getElementById('userEmail').textContent = user.email;
+
+            // 2. Load History from Firestore
+            const listContainer = document.getElementById('projects-list');
+            listContainer.innerHTML = ''; // Clear loading text
+
+            try {
+                // Query: Get blueprints for THIS user, ordered by newest first
+                const q = query(collection(db, "users", user.uid, "blueprints"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+
+                if (querySnapshot.empty) {
+                    listContainer.innerHTML = '<div style="text-align: center; padding: 40px; color: #64748b; background: rgba(255,255,255,0.05); border-radius: 10px;">No uploaded blueprints yet.</div>';
+                } else {
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        // Convert Firestore Timestamp to readable date
+                        const dateStr = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString() : 'Just now';
+                        // Safe string escape for onclick
+                        const safeAiAnalysis = data.aiAnalysis ? data.aiAnalysis.replace(/'/g, "\\'").replace(/"/g, '&quot;') : "No Analysis";
+
+                        const item = `
+                            <div class="project-card">
+                                <div class="project-info">
+                                    <h4>${data.fileName || "Untitled Blueprint"}</h4>
+                                    <div class="project-date"><i class="fa-regular fa-calendar"></i> ${dateStr}</div>
+                                </div>
+                                <div class="actions">
+                                    <a href="#" class="btn-view" onclick="viewOldModel('${data.modelUrl}', '${safeAiAnalysis}')">
+                                        View 3D <i class="fa-solid fa-cube"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                        listContainer.innerHTML += item;
+                    });
+                }
+            } catch (error) {
+                console.error("Error loading history:", error);
+                listContainer.innerHTML = '<p style="color: #ff4444; text-align: center;">Failed to load history.</p>';
+            }
+        } else {
+            // Not logged in? Redirect home
+            window.location.href = '/';
+        }
+    });
+
+    // Helper function to handle redirection
+    window.viewOldModel = (url, ai) => {
+        sessionStorage.setItem('modelUrl', url);
+        sessionStorage.setItem('aiAnalysis', ai);
+        window.location.href = 'result.html';
+    }
+  </script>
+</body>
+</html>

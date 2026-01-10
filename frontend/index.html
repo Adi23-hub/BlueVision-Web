@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D to 3D | Upload</title>
+  <link rel="stylesheet" href="/static/2dto3d.css">
+  <script src="https://kit.fontawesome.com/2719e9c5ba.js" crossorigin="anonymous"></script>
+  <style>
+    /* Status styles */
+    .status-message { text-align: center; margin-top: 15px; font-size: 1.1em; font-weight: bold; }
+    #status-error { color: #ff4444; }
+    #status-loading { color: #e2e8f0; }
+
+    /* --- ANIMATION FIX --- */
+    canvas.vanta-canvas {
+        position: fixed !important;
+        z-index: -1 !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        /* Removed opacity so the dark background is solid */
+    }
+  </style>
+</head>
+
+<body id="vanta-bg" style="background-color:#0f172a; color: #e2e8f0; margin:0; overflow-x:hidden;">
+  
+  <nav class="navbar" style="background-color: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;">
+    
+    <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+      <img src="/static/logo.jpg" alt="Logo" height="40" style="border-radius: 8px;">
+      <span class="logo-text" style="color: #ffffff; font-size: 1.4rem; font-weight: 800; letter-spacing: 0.5px;">BlueVision</span>
+    </div>
+
+    <div class="menu">
+      <a href="/static/2dto3d.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">Home</a>
+      <a href="/static/feature.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">Features</a>
+      <a href="/static/about.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">About</a>
+      <a href="/static/contact.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">Contact</a>
+    </div>
+
+    <div class="buttons" style="display: flex; gap: 15px;">
+      <button class="btn signin" onclick="openPopup('signinPopup')" 
+              style="background: transparent; color: #ffffff; border: 2px solid rgba(255,255,255,0.8); padding: 8px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">
+          Sign In
+      </button>
+
+      <button class="btn signup" onclick="openPopup('signupPopup')" 
+              style="background-color: #2563eb; color: white; border: none; padding: 8px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.5);">
+          Sign Up
+      </button>
+    </div>
+
+</nav>
+
+  <div class="content">
+    <h1 style="text-align: center; color: #ffffff;">Convert 2D Blueprints into 3D Models</h1>
+    <h2 style="text-align: center; color: #cbd5e1;">Get your desirable design</h2>
+  </div>
+
+  <div id="app-content" style="display: none;">
+      
+      <div class="main-gallary">
+        <div class="card" style="border: 1px solid rgba(255,255,255,0.1);"><img src="/static/img1.jpg" alt="Blueprint example"></div>
+        <div class="card" style="border: 1px solid rgba(255,255,255,0.1);"><img src="/static/img2.jpg" alt="3D model example"></div>
+      </div>
+
+      <form class="upload-container" id="upload-form" style="display: flex; flex-direction: column; align-items: center; gap: 15px; background: rgba(30, 41, 59, 0.8); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
+        <label for="fileUpload" class="upload-btn" style="background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2);">
+          <i class="fa-solid fa-cloud-arrow-up" style="color: #2563eb;"></i> Upload Blueprint
+        </label>
+        <input id="fileUpload" name="blueprint_file" type="file" accept="image/png, image/jpeg" required style="display:none;">
+        <p id="fileNameDisplay" style="margin: 0; color: #cbd5e1; font-size: 0.9em;">No file selected</p>
+
+        <button type="submit" class="upload-btn convert-btn">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Convert to 3D
+        </button>
+        
+        <p id="statusMessage" class="status-message"></p>
+      </form>
+  </div>
+
+  <div id="guest-content" style="text-align: center; padding: 50px 20px; background: rgba(30, 41, 59, 0.8); border-radius: 16px; margin: 20px auto; max-width: 600px; border: 1px solid rgba(255,255,255,0.1);">
+      <i class="fa-solid fa-lock" style="font-size: 3em; color: #475569; margin-bottom: 20px;"></i>
+      <h3 style="color: #ffffff;">Please Sign In to Start Converting</h3>
+      <p style="color: #cbd5e1; max-width: 500px; margin: 0 auto 30px auto;">
+          Create an account or log in to upload your blueprints, save your history, and view your 3D models.
+      </p>
+      <div style="display: flex; gap: 20px; justify-content: center;">
+          <button class="btn signin" onclick="openPopup('signinPopup')" style="padding: 10px 30px; font-size: 1.1em; background-color: #2563eb; color: white; border: none; border-radius: 5px; cursor: pointer;">Sign In</button>
+          <button class="btn signup" onclick="openPopup('signupPopup')" style="padding: 10px 30px; font-size: 1.1em; background-color: transparent; color: #ffffff; border: 1px solid #ffffff; border-radius: 5px; cursor: pointer;">Sign Up</button>
+      </div>
+  </div>
+
+  <div class="popup" id="signinPopup" style="color: #333;">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup('signinPopup')">&times;</span>
+      <h2>Sign In</h2>
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+      <button class="google-btn" style="background-color: white; color: #333; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style="width:20px;">
+      Continue with Google
+      </button>
+      <button>Sign In</button>
+    </div>
+  </div>
+
+  <div class="popup" id="signupPopup" style="color: #333;">
+    <div class="popup-content">
+      <span class="close-btn" onclick="closePopup('signupPopup')">&times;</span>
+      <h2>Sign Up</h2>
+      <input type="text" placeholder="Full Name" required>
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+
+      <button class="google-btn" style="background-color: white; color: #333; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px;">
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style="width:20px;">
+      Continue with Google
+      </button>
+      <button>Sign Up</button>
+    </div>
+  </div>
+
+  <footer>
+    <p style="color: #cbd5e1;">Help</p>
+    <div class="Icons" style="color: #cbd5e1;">SolidView 2025 <a href="" style="color: #ffffff;"><i class="fa-brands fa-instagram"></i></a></div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            VANTA.GLOBE({
+                el: "#vanta-bg",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                // --- CUSTOM DARK THEME COLORS ---
+                color: 0x2563eb,       /* Keep Royal Blue Wireframe */
+                // UPDATED BACKGROUND TO DARK SLATE BLUE (Matches body)
+                backgroundColor: 0x0f172a, 
+                size: 1.10,
+                // UPDATED SECONDARY LINES TO LIGHTER BLUE FOR CONTRAST
+                color2: 0x1e293b       
+            })
+        } catch(e) {
+            console.log("Animation error:", e);
+        }
+    });
+  </script>
+  <script type="module">
+  // --- 1. IMPORTS (Auth + Database) ---
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword, 
+    onAuthStateChanged, 
+    signOut, 
+    GoogleAuthProvider, 
+    signInWithPopup 
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    serverTimestamp 
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // --- 2. CONFIGURATION ---
+  const firebaseConfig = {
+      apiKey: "AIzaSyAVawwT5U4X4Av_BDXD_gGluqgstuJPE7w",
+      authDomain: "bluevision-29a45.firebaseapp.com",
+      projectId: "bluevision-29a45",
+      storageBucket: "bluevision-29a45.firebasestorage.app",
+      messagingSenderId: "824504017524",
+      appId: "1:824504017524:web:83f2421f47462df350e721",
+      measurementId: "G-JCETH5XHR8"
+  };
+
+  // --- 3. INITIALIZATION ---
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const googleProvider = new GoogleAuthProvider();
+
+  // --- 4. GLOBAL POPUP HELPERS ---
+  window.openPopup = (id) => document.getElementById(id).style.display = 'flex';
+  window.closePopup = (id) => document.getElementById(id).style.display = 'none';
+
+  // --- 5. MAIN LOGIC ---
+  document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- GOOGLE SIGN IN ---
+    const googleBtns = document.querySelectorAll('.google-btn');
+    googleBtns.forEach(btn => {
+        btn.addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                closePopup('signinPopup');
+                closePopup('signupPopup');
+            } catch (error) {
+                alert("Google Sign-In Error: " + error.message);
+            }
+        });
+    });
+
+    // --- EMAIL SIGN UP ---
+    const signupBtn = document.querySelector('#signupPopup button:not(.google-btn)');
+    if (signupBtn) {
+        signupBtn.addEventListener('click', async () => {
+            const emailInput = document.querySelector('#signupPopup input[type="email"]');
+            const passInput = document.querySelector('#signupPopup input[type="password"]');
+            
+            if(!emailInput.value || !passInput.value) { alert("Please fill in all fields."); return; }
+
+            try {
+                await createUserWithEmailAndPassword(auth, emailInput.value, passInput.value);
+                alert("✅ Account created!");
+                closePopup('signupPopup');
+            } catch (error) {
+                alert("❌ Error: " + error.message);
+            }
+        });
+    }
+
+    // --- EMAIL SIGN IN ---
+    const signinBtn = document.querySelector('#signinPopup button:not(.google-btn)');
+    if (signinBtn) {
+        signinBtn.addEventListener('click', async () => {
+            const emailInput = document.querySelector('#signinPopup input[type="email"]');
+            const passInput = document.querySelector('#signinPopup input[type="password"]');
+
+            try {
+                await signInWithEmailAndPassword(auth, emailInput.value, passInput.value);
+                alert("✅ Welcome back!");
+                closePopup('signinPopup');
+            } catch (error) {
+                alert("❌ Login Failed: " + error.message);
+            }
+        });
+    }
+
+   // --- AUTH STATE & GATEKEEPER ---
+    onAuthStateChanged(auth, (user) => {
+        const navButtons = document.querySelector('.buttons');
+        const appContent = document.getElementById('app-content');
+        const guestContent = document.getElementById('guest-content');
+        
+        if (user) {
+            // --- 1. LOGGED IN ---
+            if(appContent) appContent.style.display = 'block';
+            if(guestContent) guestContent.style.display = 'none';
+
+            const username = user.email.split('@')[0]; 
+            
+            // UPDATED: Profile is now a bright white "pill" button with a clear border
+            navButtons.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <a href="/profile.html" style="text-decoration: none; color: #ffffff; font-weight: bold; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.15); padding: 8px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.5); transition: 0.3s;">
+                        <i class="fa-solid fa-circle-user" style="font-size: 1.3em; color: #ffffff;"></i>
+                        <span style="text-transform: capitalize; font-size: 1rem; letter-spacing: 0.5px;">${username}</span>
+                    </a>
+                    <button class="btn" id="logoutBtn" style="background:#dc3545; color:white; padding: 8px 20px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+                        Logout
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                signOut(auth).then(() => window.location.reload());
+            });
+
+        } else {
+            // --- 2. LOGGED OUT ---
+            if(appContent) appContent.style.display = 'none';
+            if(guestContent) guestContent.style.display = 'block';
+
+            // UPDATED: Sign In has a thick white border, Sign Up is bright blue
+            navButtons.innerHTML = `
+                <button class="btn signin" onclick="openPopup('signinPopup')" 
+                    style="background: transparent; color: #ffffff; border: 2px solid #ffffff; padding: 8px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-right: 10px;">
+                    Sign In
+                </button>
+                <button class="btn signup" onclick="openPopup('signupPopup')" 
+                    style="background-color: #2563eb; color: white; border: none; padding: 10px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(37, 99, 235, 0.6);">
+                    Sign Up
+                </button>
+            `;
+        }
+    });
+
+    // --- UPLOAD & SAVE ---
+    const form = document.getElementById('upload-form');
+    const fileInput = document.getElementById('fileUpload');
+    const statusMessage = document.getElementById('statusMessage');
+
+    if (form) {
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            statusMessage.textContent = "⏳ Processing...";
+            
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/convert', { method: 'POST', body: formData });
+                const result = await response.json();
+
+                if (response.ok) {
+                    const user = auth.currentUser;
+                    if (user) {
+                        try {
+                            await addDoc(collection(db, "users", user.uid, "blueprints"), {
+                                fileName: file.name,
+                                modelUrl: result.model_url,
+                                aiAnalysis: result.ai_analysis || "No analysis",
+                                createdAt: serverTimestamp()
+                            });
+                            console.log("History saved to DB!");
+                        } catch (err) {
+                            console.error("Error saving history:", err);
+                        }
+                    }
+                    
+                    sessionStorage.setItem('modelUrl', result.model_url);
+                    sessionStorage.setItem('aiAnalysis', result.ai_analysis);
+                    window.location.href = 'result.html'; 
+                } else {
+                    statusMessage.textContent = `❌ Error: ${result.error_message}`;
+                }
+            } catch (error) {
+                console.error(error);
+                statusMessage.textContent = "⚠️ Network error.";
+            }
+        });
+    }
+
+  });
+</script>
+</body>
+</html>
