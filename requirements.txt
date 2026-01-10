@@ -12,3 +12,4 @@ pydantic
 google-genai
 networkx
 opencv-python-headless
+shapely
