@@ -11,3 +11,4 @@ passlib[bcrypt]
 pydantic
 google-genai
 networkx
+opencv-python-headless
