@@ -64,8 +64,8 @@
   <div id="app-content" style="display: none;">
       
       <div class="main-gallary">
-        <div class="card" style="border: 1px solid rgba(255,255,255,0.1);"><img src="/static/img1.jpg" alt="Blueprint example"></div>
-        <div class="card" style="border: 1px solid rgba(255,255,255,0.1);"><img src="/static/img2.jpg" alt="3D model example"></div>
+        <div class="card" style="border: 1px solid rgba(255,255,255,0.1);"><img src="./img1.jpg" alt="Blueprint example"></div>
+        <div class="card" style="border: 1px solid rgba(255,255,255,0.1);"><img src="./img2.jpg" alt="3D model example"></div>
       </div>
 
       <form class="upload-container" id="upload-form" style="display: flex; flex-direction: column; align-items: center; gap: 15px; background: rgba(30, 41, 59, 0.8); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);">
@@ -315,7 +315,7 @@
             const formData = new FormData(form);
 
             try {
-                    const API_BASE = "https://YOUR-RENDER-BACKEND.onrender.com";
+                    const API_BASE = "https://bluevision-web.onrender.com";
                     const response = await fetch(`${API_BASE}/convert`, { method: 'POST', body: formData });
                     const result = await response.json();
 
