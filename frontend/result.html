@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BlueVision | 3D Result</title>
-  <link rel="stylesheet" href="/static/2dto3d.css">
+  <link rel="stylesheet" href="./2dto3d.css">
   <script src="https://kit.fontawesome.com/2719e9c5ba.js" crossorigin="anonymous"></script>
 
   <script type="importmap">
@@ -82,11 +82,11 @@
 
   <nav class="navbar" style="background-color: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;">
     <div class="logo" style="display: flex; align-items: center; gap: 10px;">
-      <img src="/static/logo.jpg" alt="Logo" height="40" style="border-radius: 8px;">
+      <img src="./logo.jpg" alt="Logo" height="40" style="border-radius: 8px;">
       <span class="logo-text" style="color: #ffffff; font-size: 1.4rem; font-weight: 800;">BlueVision Result</span>
     </div>
     <div class="buttons">
-       <a href="/" class="btn" style="background: transparent; color: #ffffff; border: 1px solid #ffffff; text-decoration: none; padding: 8px 20px; border-radius: 6px; font-weight: bold;">Convert New</a>
+       <a href="./index.html" class="btn" style="background: transparent; color: #ffffff; border: 1px solid #ffffff; text-decoration: none; padding: 8px 20px; border-radius: 6px; font-weight: bold;">Convert New</a>
     </div>
   </nav>
 
@@ -95,7 +95,7 @@
   <div id="model-viewer-container"></div>
 
   <div class="result-controls">
-      <button class="btn-action btn-back" onclick="window.location.href='/'">
+      <button class="btn-action btn-back" onclick="window.location.href='./index.html'">
              <i class="fa-solid fa-arrow-left"></i> Convert Another
       </button>
       <a id="downloadLink" class="btn-action btn-download" href="#" download>
@@ -144,7 +144,7 @@
 
         if (!modelUrl) {
             alert("No model found. Redirecting to home.");
-            window.location.href = '/';
+            window.location.href = './index.html';
             return;
         }
 
@@ -192,11 +192,11 @@
 
         // 6. Load Model
         const textureLoader = new THREE.TextureLoader();
-        const wallTexture = textureLoader.load('/static/textures/wall_plaster.jpeg');
+        const wallTexture = textureLoader.load('./textures/wall_plaster.jpeg');
         wallTexture.wrapS = THREE.RepeatWrapping; wallTexture.wrapT = THREE.RepeatWrapping;
         wallTexture.repeat.set(5, 5); 
 
-        const floorTexture = textureLoader.load('/static/textures/wood_floor.jpeg');
+        const floorTexture = textureLoader.load('./textures/wood_floor.jpeg');
         floorTexture.wrapS = THREE.RepeatWrapping; floorTexture.wrapT = THREE.RepeatWrapping;
         floorTexture.repeat.set(10, 10); 
 

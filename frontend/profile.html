@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile | BlueVision</title>
-  <link rel="stylesheet" href="/static/2dto3d.css">
+  <link rel="stylesheet" href="./2dto3d.css">
   <script src="https://kit.fontawesome.com/2719e9c5ba.js" crossorigin="anonymous"></script>
   
   <style>
@@ -112,16 +112,16 @@
 
   <nav class="navbar" style="background-color: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;">
     <div class="logo" style="display: flex; align-items: center; gap: 10px;">
-      <img src="/static/logo.jpg" alt="Logo" height="40" style="border-radius: 8px;">
+      <img src="./logo.jpg" alt="Logo" height="40" style="border-radius: 8px;">
       <span class="logo-text" style="color: #ffffff; font-size: 1.4rem; font-weight: 800;">BlueVision Profile</span>
     </div>
     <div class="menu">
-       <a href="/" style="color: #e2e8f0; text-decoration: none; font-weight: 600;">Home</a>
+       <a href="./index.html" style="color: #e2e8f0; text-decoration: none; font-weight: 600;">Home</a>
     </div>
   </nav>
 
   <div class="profile-container">
-      <a href="/" class="btn-home"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+      <a href="./index.html" class="btn-home"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
       
       <div class="profile-header">
           <div class="avatar"><i class="fa-solid fa-user"></i></div>
@@ -227,7 +227,7 @@
             }
         } else {
             // Not logged in? Redirect home
-            window.location.href = '/';
+            window.location.href = "./index.html";
         }
     });
 

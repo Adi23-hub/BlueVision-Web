@@ -43,6 +43,8 @@ except ImportError:
 # IMPORTANT: Set 'GEMINI_API_KEY' in Render Environment Variables!
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
+# Public backend URL (Render)
+BACKEND_PUBLIC_URL = os.environ.get("BACKEND_PUBLIC_URL", "")
 
 # Initialize FastAPI
 app = FastAPI(title="Blueprint 2 3D")
@@ -110,7 +112,8 @@ async def convert_blueprint_to_3d(
 
     model_filename = f"{Path(blueprint_file.filename).stem}_{int(time.time())}.obj"
     output_model_path = MODELS_DIR / model_filename
-    model_url = f"/models/{model_filename}"
+    model_url = f"{BACKEND_PUBLIC_URL}/models/{model_filename}" if BACKEND_PUBLIC_URL else f"/models/{model_filename}"
+
 
     try:
         # A. Gemini Analysis
@@ -154,26 +157,8 @@ async def register_user(user: UserCreate, db: Session = Depends(get_db)):
 #  PAGE ROUTES
 # ==========================================
 
-@app.get("/")
-async def read_root():
-    return FileResponse(FRONTEND_DIR / "index.html")
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
-@app.get("/{page_name}")
-async def read_page(page_name: str):
-    # 1. Try serving HTML page (e.g. /about -> about.html)
-    html_path = FRONTEND_DIR / f"{page_name}.html"
-    if html_path.exists():
-        return FileResponse(html_path)
-    
-    # 2. Try serving file directly (e.g. /logo.jpg)
-    file_path = FRONTEND_DIR / page_name
-    if file_path.exists():
-        return FileResponse(file_path)
 
-    return JSONResponse(status_code=404, content={"error": "Not Found"})
-
-# ==========================================
-#  CATCH-ALL STATIC MOUNT (Crucial!)
-# ==========================================
-# This makes <img src="logo.jpg"> work by looking in frontend folder automatically
-app.mount("/", StaticFiles(directory=FRONTEND_DIR), name="frontend_root")

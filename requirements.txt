@@ -12,4 +12,5 @@ pydantic
 google-genai
 networkx
 opencv-python-headless
-shapely
+firebase-admin
+google-cloud-firestore

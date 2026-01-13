@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2D to 3D | Upload</title>
-  <link rel="stylesheet" href="/static/2dto3d.css">
+  <link rel="stylesheet" href="./2dto3d.css">
   <script src="https://kit.fontawesome.com/2719e9c5ba.js" crossorigin="anonymous"></script>
   <style>
     /* Status styles */
@@ -31,15 +31,15 @@
   <nav class="navbar" style="background-color: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;">
     
     <div class="logo" style="display: flex; align-items: center; gap: 10px;">
-      <img src="/static/logo.jpg" alt="Logo" height="40" style="border-radius: 8px;">
+      <img src="./logo.jpg" alt="Logo" height="40" style="border-radius: 8px;">
       <span class="logo-text" style="color: #ffffff; font-size: 1.4rem; font-weight: 800; letter-spacing: 0.5px;">BlueVision</span>
     </div>
 
     <div class="menu">
-      <a href="/static/2dto3d.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">Home</a>
-      <a href="/static/feature.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">Features</a>
-      <a href="/static/about.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">About</a>
-      <a href="/static/contact.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">Contact</a>
+      <a href="./2dto3d.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">Home</a>
+      <a href="./feature.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">Features</a>
+      <a href="./about.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">About</a>
+      <a href="./contact.html" style="color: #e2e8f0; text-decoration: none; margin: 0 15px; font-weight: 600; font-size: 1.05rem;">Contact</a>
     </div>
 
     <div class="buttons" style="display: flex; gap: 15px;">
@@ -315,8 +315,9 @@
             const formData = new FormData(form);
 
             try {
-                const response = await fetch('/convert', { method: 'POST', body: formData });
-                const result = await response.json();
+                    const API_BASE = "https://YOUR-RENDER-BACKEND.onrender.com";
+                    const response = await fetch(`${API_BASE}/convert`, { method: 'POST', body: formData });
+                    const result = await response.json();
 
                 if (response.ok) {
                     const user = auth.currentUser;
