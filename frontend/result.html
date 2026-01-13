@@ -142,6 +142,9 @@
         const modelUrl = sessionStorage.getItem('modelUrl');
         const aiText = sessionStorage.getItem('aiAnalysis');
 
+         console.log("Model URL:", modelUrl); 
+
+
         if (!modelUrl) {
             alert("No model found. Redirecting to home.");
             window.location.href = './index.html';
